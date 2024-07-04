@@ -1,28 +1,43 @@
 #!/bin/bash
 
-echo "请选择操作："
-echo "1. 安装环境并运行节点"
-echo "2. 查看当前日志"
-read -p "输入选项（1或2）：" option
+echo "Please select an option:"
+echo "1. Install environment and run node"
+echo "2. View current logs"
+read -p "Enter your choice (1 or 2): " option
 
 case $option in
 1)
-  echo "正在安装 pm2..."
-  sudo npm i -g pm2
-  echo "创建目录并进入..."
+  # Check and install Node.js and npm
+  if ! command -v node >/dev/null 2>&1; then
+    echo "Node.js is not installed, installing..."
+    sudo apt update
+    sudo apt install -y nodejs npm
+  else
+    echo "Node.js is already installed."
+  fi
+
+  # Check and install pm2
+  if ! command -v pm2 >/dev/null 2>&1; then
+    echo "Installing pm2..."
+    sudo npm i -g pm2
+  else
+    echo "pm2 is already installed."
+  fi
+
+  echo "Creating directory and entering it..."
   mkdir -p repos/pl && cd repos/pl
-  echo "下载并设置节点运行文件..."
+  echo "Downloading and setting up the node execution file..."
   wget -O aleo-pool-prover https://github.com/zkrush/aleo-pool-client/releases/download/v1.5-testnet-beta/aleo-pool-prover && chmod +x aleo-pool-prover
-  read -p "请输入节点名称：" node_name
-  echo "启动节点..."
+  read -p "Please enter the node name: " node_name
+  echo "Starting the node..."
   pm2 start ./aleo-pool-prover --name "aleo-pool-prover" -- --pool wss://aleo.zkrush.com:3333 --account $node_name --worker-name $node_name
   ;;
 2)
-  echo "查看日志..."
+  echo "Viewing logs..."
   pm2 logs aleo-pool-prover
   ;;
 *)
-  echo "无效选项，请重新运行脚本选择正确的选项。"
+  echo "Invalid option, please rerun the script and select the correct option."
   exit 1
   ;;
 esac
