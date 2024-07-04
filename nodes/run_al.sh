@@ -8,9 +8,9 @@ read -p "Enter your choice (1 or 2): " option
 case $option in
 1)
   # Check and install Node.js and npm
-  if ! command -v node >/dev/null 2>&1; then
+  if ! command -v npm >/dev/null 2>&1; then
     echo "Node.js is not installed, installing..."
-    sudo apt update
+    # sudo apt update
     sudo apt install -y nodejs npm
   else
     echo "Node.js is already installed."
