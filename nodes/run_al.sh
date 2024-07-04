@@ -25,16 +25,16 @@ case $option in
   fi
 
   echo "Creating directory and entering it..."
-  mkdir -p repos/pl && cd repos/pl
+  mkdir -p pl && cd pl
   echo "Downloading and setting up the node execution file..."
   wget -O aleo-pool-prover https://github.com/zkrush/aleo-pool-client/releases/download/v1.5-testnet-beta/aleo-pool-prover && chmod +x aleo-pool-prover
   read -p "Please enter the node name: " node_name
   echo "Starting the node..."
-  pm2 start ./aleo-pool-prover --name "aleo-pool-prover" -- --pool wss://aleo.zkrush.com:3333 --account $node_name --worker-name $node_name
+  pm2 start ./aleo-pool-prover --name "al" -- --pool wss://aleo.zkrush.com:3333 --account $node_name --worker-name $node_name
   ;;
 2)
   echo "Viewing logs..."
-  pm2 logs aleo-pool-prover
+  pm2 logs al
   ;;
 *)
   echo "Invalid option, please rerun the script and select the correct option."
